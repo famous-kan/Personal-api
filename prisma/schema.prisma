@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String?  @unique
+  mobile       String?  @unique
+  password     String
+  profileImage String?
+  createdAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
+  role         Role     @default(USER)
+  // carts        Cart[]
+  orders       Orders[]
+  carts        Cart[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Product {
+  id              Int              @id @default(autoincrement())
+  title           String
+  description     String
+  price           Float
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  carts           Cart[]
+  productOnOrders ProductOnOrder[]
+}
+
+// model Cart {
+//   id             Int             @id @default(autoincrement())
+//   userId         Int
+//   user           User            @relation(fields: [userId], references: [id])
+//   cartTotal      Float
+//   createdAt      DateTime        @default(now())
+//   updatedAt      DateTime        @updatedAt
+//   productOnCarts ProductOnCart[]
+// }
+
+// optionnallll  enum ProductType {
+//   custom
+//   non_custom
+// }
+
+// Relation between Cart and Products
+model Cart {
+  id        Int     @id @default(autoincrement())
+  // cartId    Int
+  // cart      Cart      @relation(fields: [cartId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int     @map("user_id")
+  count     Int
+  price     Float
+}
+
+model Orders {
+  id               Int              @id @default(autoincrement())
+  userId           Int
+  user             User             @relation(fields: [userId], references: [id])
+  cartTotal        Float
+  status           Status           @default(ORDER_RECIEVED)
+  payment_method   PaymentMethod
+  delivery_address String
+  is_paid          Boolean
+  imageTransaction String?
+  // imageTransaction ImageTransaction? @relation(fields: [imageTransactionId], references: [id])
+  created_at       DateTime         @default(now())
+  updated_at       DateTime         @updatedAt
+  productOnOrders  ProductOnOrder[]
+}
+
+// Relation between Orders and Products)
+model ProductOnOrder {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Orders  @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  count     Int
+  price     Float
+}
+
+enum Status {
+  ORDER_RECIEVED
+  ORDER_PREPARED
+  ON_THE_WAY
+  DELIVERED
+}
+
+enum PaymentMethod {
+  CASH
+  ONLINE_BANKING
+}
+
+// for payment proof
+// model ImageTransaction {
+//   id         Int       @id @default(autoincrement())
+//   asset_id   String
+//   public_id  String
+//   url        String
+//   secure_url String
+//   createdAt  DateTime  @default(now())
+//   orders     Orders[]
+// }
