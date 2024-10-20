@@ -1,26 +1,16 @@
 const express = require('express')
 const userRouter = express.Router()
 const userController = require('../controllers/user-controller')
-const {authenticate} = require('../middlewares/authenticate')
+const {authenticate, adminCheck} = require('../middlewares/authenticate')
 const uploadMulter = require('../middlewares/upload-multer')
 
 
 userRouter.patch('/',authenticate, uploadMulter.single('image') , userController.editUserdata)
 
+userRouter.get('/member',authenticate, adminCheck, userController.getAlluser )
+userRouter.patch('/member/:memberId',authenticate, adminCheck , userController.updateUser)
+userRouter.delete('/member/:memberId',authenticate,adminCheck , userController.deleteUser)
 
-// userRouter.get("/users", )
-// userRouter.post("/changeStatus", )
-// userRouter.post("/changeRole", )
-
-
-// userRouter.post("/cart", )
-// userRouter.get("/cart", )
-// userRouter.delete("/cart", )
-
-// userRouter.post("/address", )
-
-// userRouter.post("/order", )
-// userRouter.get("/order", )
 
 module.exports = userRouter
 

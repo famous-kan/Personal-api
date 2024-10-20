@@ -95,3 +95,56 @@ exports.editUserdata = async(req,res,next) => {
         next(err)
     }
 }
+
+
+exports.getAlluser = async(req,res,next) => {
+    try {
+    const alluser = await prisma.user.findMany({
+        select: {
+            id: true,
+            email: true,
+            mobile: true,
+            role: true,
+        }
+    })
+    const identityArray = alluser.map((el) => {
+        return ({...el,"identity":el.email||el.mobile})
+    })
+    res.json(identityArray)
+    } catch (err) {
+        next(err)
+    }
+}
+
+exports.updateUser = async(req,res,next) => {
+    try {
+        const {memberId} = req.params
+        const {role} = req.body 
+        const getRole = await prisma.user.update({
+            where: {
+                id : +memberId
+            }, 
+            data: {
+                role : role
+            }
+        })
+        res.json(getRole)
+    } catch (err) {
+        next(err)
+    }
+}
+
+exports.deleteUser = async(req,res,next) => {
+    try {
+        const {memberId} = req.params
+        const deleteUser = await prisma.user.delete({
+            where: {
+                id: +memberId
+            }
+        })
+        res.json("Delete completed")
+
+    } catch (err) {
+        next(err)
+    }
+}

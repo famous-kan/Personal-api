@@ -182,3 +182,22 @@ exports.getAllorder = async(req,res,next) => {
         next(error)
     }
 }
+
+exports.delistatus = async(req,res,next) => {
+    try {
+        const {id ,status} = req.body
+        const statusCheck = await prisma.orders.update({
+            where: {
+                id: +id,
+            },
+            data: {
+                status : status
+            }
+
+        })
+        res.json(statusCheck)
+
+    } catch (err) {
+        next(err)
+    }
+}

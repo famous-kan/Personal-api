@@ -8,5 +8,6 @@ orderRoute.post('/', authenticate,uploadMulter.single('image'), orderController.
 orderRoute.post('/product', orderController.productOnOrder)
 orderRoute.get('/', authenticate, orderController.getOrder)
 orderRoute.get('/all', authenticate, adminCheck, orderController.getAllorder)
+orderRoute.patch('/all', authenticate, adminCheck, orderController.delistatus )
 
 module.exports = orderRoute
