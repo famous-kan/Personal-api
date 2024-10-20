@@ -28,6 +28,7 @@ module.exports.authenticate = async(req,res,next) => {
         
         const { password , createdAt, updatedAt, ...userData } = foundUser
         req.user = userData
+        req.pass = password
 
         next()
 

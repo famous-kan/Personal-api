@@ -105,7 +105,7 @@ exports.productOnOrder = async(req,res,next) => {
         }
 
         for (let item of shoppingCart ){
-            console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",item)
+            
             let findProduct = await prisma.product.findUnique({
                 where: {
                     id : +item.productId
@@ -132,5 +132,53 @@ exports.productOnOrder = async(req,res,next) => {
     } catch (err) {
         console.log(err)
         next(err)
+    }
+}
+
+exports.getOrder = async(req,res,next) => {
+    try {
+        const {id} = req.user
+        if(!id){
+         return createError(400,'Put all input')
+        }
+
+        const recieveOrder = await prisma.orders.findMany({
+            where: {
+                userId : +id
+            }, 
+            include : {
+                productOnOrders : {
+                    include : {
+                        product : {
+                            select : {title : true}
+                        }
+                    },
+                }
+            }
+        })
+        res.json(recieveOrder)
+    } catch (err) {
+        console.log(err)
+        next(err)
+    }
+}
+
+exports.getAllorder = async(req,res,next) => {
+
+    try {
+        const recieveOrder = await prisma.orders.findMany({
+            include : {
+                productOnOrders : {
+                    include : {
+                        product : {
+                            select : {title : true}
+                        }
+                    },
+                }
+            }
+        })
+        res.json(recieveOrder)
+    } catch (error) {
+        next(error)
     }
 }

@@ -36,7 +36,6 @@ exports.create = async(req,res,next) => {
 exports.update = async(req,res,next) => {
     try {
         const {id} = req.params
-        console.log("this is id ------------------------------------------",req.params.id)
         const {title, description, price, image } = req.body
         const havefile = !!req.file
         let uploadResult = {} 
@@ -123,12 +122,40 @@ exports.listby = async(req,res,next) => {
     }
 } 
 
-
-
-exports.searchFilters = (req,res,next) => {
+const hdlQuery = async(req,res,query) => {
     try {
-        res.json('search filter ... product')
+        const products = await prisma.product.findMany({
+            where: {
+                title: {
+                    contains: query
+                },
+               
+            }
+        })
+        res.json(products)
     } catch (err) {
-        console.log(err)
+        res.status(500).json({ message: "Search error" })
+     next(err)   
+    }
+}
+
+
+
+exports.searchFilters = async(req,res,next) => {
+    try {
+        const {query,price} = req.body
+
+        if(query){
+            console.log(query, "QUEEERRRYYY")
+            await hdlQuery(req,res,query)
+        }
+        if(price){
+            console.log(price, "priceeeeeeeeeeeee")
+            
+        }
+
+        // res.json(getproducts)
+    } catch (err) {
+        res.status(404).json({ error: err.message })
     }
 } 
