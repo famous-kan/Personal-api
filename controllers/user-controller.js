@@ -142,7 +142,8 @@ exports.deleteUser = async(req,res,next) => {
                 id: +memberId
             }
         })
-        res.json("Delete completed")
+        console.log(deleteUser)
+        res.json(deleteUser)
 
     } catch (err) {
         next(err)

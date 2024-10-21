@@ -45,7 +45,6 @@ exports.update = async(req,res,next) => {
             }
         })
         if(havefile){
-            console.log(cloudinary.uploader)
              uploadResult = await cloudinary.uploader.upload(req.file.path, {
                 overwrite : true,
                 public_id :path.parse(req.file.path).name

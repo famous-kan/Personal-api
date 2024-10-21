@@ -25,8 +25,8 @@ model User {
   updatedAt    DateTime @updatedAt @db.Timestamp(0)
   role         Role     @default(USER)
   // carts        Cart[]
-  orders       Orders[]
-  carts        Cart[]
+  orders       Orders[] 
+  carts        Cart[]   
 }
 
 enum Role {
@@ -68,7 +68,7 @@ model Cart {
   // cart      Cart      @relation(fields: [cartId], references: [id])
   productId Int
   product   Product @relation(fields: [productId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id],  onDelete: Cascade)
   userId    Int     @map("user_id")
   count     Int
   price     Float
@@ -77,7 +77,7 @@ model Cart {
 model Orders {
   id               Int              @id @default(autoincrement())
   userId           Int
-  user             User             @relation(fields: [userId], references: [id])
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   cartTotal        Float
   status           Status           @default(ORDER_RECIEVED)
   payment_method   PaymentMethod
