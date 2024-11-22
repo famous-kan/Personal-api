@@ -117,10 +117,10 @@ exports.curentUser = (req,res,next) => {
     }
 }
 
-exports.curentAdmin = async(req,res,next) => {
-    try {
-        res.json('Current Admin')
-    } catch (err) {
-        next(err)
-    }
-}
+// exports.curentAdmin = async(req,res,next) => {
+//     try {
+//         res.json('Current Admin')
+//     } catch (err) {
+//         next(err)
+//     }
+// }

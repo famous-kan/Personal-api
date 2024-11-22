@@ -7,7 +7,7 @@ module.exports.authenticate = async(req,res,next) => {
     try {
         const authorization = req.headers.authorization
         if(!authorization || !authorization.startsWith('Bearer')){
-            createError(401, 'Unauthorizedddd')
+            createError(401, 'Unauthorizeddd')
         }
     
         

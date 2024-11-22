@@ -137,6 +137,7 @@ exports.updateUser = async(req,res,next) => {
 exports.deleteUser = async(req,res,next) => {
     try {
         const {memberId} = req.params
+        console.log(memberId)
         const deleteUser = await prisma.user.delete({
             where: {
                 id: +memberId

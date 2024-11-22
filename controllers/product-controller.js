@@ -8,6 +8,7 @@ const createError = require("../utils/createError")
 exports.create = async(req,res,next) => {
     try {
         const {title, description, price, image } = req.body
+        
         const havefile = !!req.file
         let uploadResult = {} 
         if(havefile){
@@ -18,6 +19,10 @@ exports.create = async(req,res,next) => {
                 
             })
             fs.unlink(req.file.path)
+        }
+
+        if(!(title.trim() || description.trim() || price.trim())){
+            return createError(400,'Please fill the data')
         }
         const product = await prisma.product.create({
             data: {
@@ -104,22 +109,20 @@ exports.delete = async (req,res,next) => {
 
 
 
-exports.listby = async(req,res,next) => {
-    try {
-        const {sort, order, limit} = req.body
+// exports.listby = async(req,res,next) => {
+//     try {
+//         const {sort, order, limit} = req.body
 
-        const products = await prisma.product.findMany({
-            take : limit,
-            orderBy : {[sort]: order}
+//         const products = await prisma.product.findMany({
+//             take : limit,
+//             orderBy : {[sort]: order}
     
-        }) 
-        
-
-        res.json(products)
-    } catch (err) {
-        console.log(err)
-    }
-} 
+//         }) 
+//         res.json(products)
+//     } catch (err) {
+//         console.log(err)
+//     }
+// } 
 
 const hdlQuery = async(req,res,query) => {
     try {
@@ -158,3 +161,5 @@ exports.searchFilters = async(req,res,next) => {
         res.status(404).json({ error: err.message })
     }
 } 
+
+

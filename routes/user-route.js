@@ -6,7 +6,6 @@ const uploadMulter = require('../middlewares/upload-multer')
 
 
 userRouter.patch('/',authenticate, uploadMulter.single('image') , userController.editUserdata)
-
 userRouter.get('/member',authenticate, adminCheck, userController.getAlluser )
 userRouter.patch('/member/:memberId',authenticate, adminCheck , userController.updateUser)
 userRouter.delete('/member/:memberId',authenticate,adminCheck , userController.deleteUser)
