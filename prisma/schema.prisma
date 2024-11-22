@@ -27,6 +27,8 @@ model User {
   // carts        Cart[]
   orders       Orders[] 
   carts        Cart[]   
+
+  @@map("user")
 }
 
 enum Role {
@@ -44,6 +46,8 @@ model Product {
   updatedAt       DateTime         @updatedAt
   carts           Cart[]
   productOnOrders ProductOnOrder[]
+
+  @@map("product")
 }
 
 // model Cart {
@@ -72,6 +76,8 @@ model Cart {
   userId    Int     @map("user_id")
   count     Int
   price     Float
+
+  @@map("cart")
 }
 
 model Orders {
@@ -88,6 +94,8 @@ model Orders {
   created_at       DateTime         @default(now())
   updated_at       DateTime         @updatedAt
   productOnOrders  ProductOnOrder[]
+
+  @@map("orders")
 }
 
 // Relation between Orders and Products)
@@ -99,6 +107,8 @@ model ProductOnOrder {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   count     Int
   price     Float
+
+  @@map("productonorder")
 }
 
 enum Status {
